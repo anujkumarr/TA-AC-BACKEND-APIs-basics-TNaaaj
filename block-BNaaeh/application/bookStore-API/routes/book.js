@@ -45,6 +45,7 @@ router.delete('/:id', (req, res, next) => {
   var id = req.params.id;
   Book.findByIdAndDelete(id, (err, book) => {
     if (err) return next(err);
+    
     res.status(200).json({ book });
   });
 });
