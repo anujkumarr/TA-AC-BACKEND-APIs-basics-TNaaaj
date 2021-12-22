@@ -6,6 +6,7 @@ let Comment = require('../models/Comments');
 
 // List all books
 router.get('/', (req, res, next) => {
+  console.log("hey")
   NewBook.find({}, (err, books) => {
     if (err) return next(err);
     res.status(200).json({ books });
@@ -49,7 +50,7 @@ router.delete('/:id', (req, res, next) => {
     if (err) return next(err);
     Comment.deleteMany({ bookId: id }, (err, comments) => {
       if (err) return next(err);
-      res.status(200).json({ book });
+     res.status(200).json({ book });
     });
     res.status(200).json({ book });
   });
@@ -58,11 +59,11 @@ router.delete('/:id', (req, res, next) => {
 // Add Comment
 router.post('/newComment/:id', (req, res, next) => {
   var bookId = req.params.id;
-  var data = req.body;
-  Comment.create(data, (err, comment) => {
+  req.body.bookId = bookId;
+  Comment.create(req.body, (err, comment) => {
     if (err) return next(err);
     NewBook.findByIdAndUpdate(
-      id,
+      bookId,
       { $push: { comments: comment._id } },
       (err, book) => {
         if (err) return next(err);
